@@ -1,0 +1,305 @@
+# Default values for application chart
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global default image settings
+# These values will be used as defaults for all resources unless overridden
+image:
+  # Default Docker image repository
+  repository: ""
+  # Default image tag (version)
+  tag: ""
+  # Image pull policy
+  pullPolicy: IfNotPresent
+
+# Image pull secrets for private registries
+imagePullSecrets: []
+
+# Override the chart name
+nameOverride: ""
+# Override the full name
+fullnameOverride: ""
+
+# ServiceAccount configuration
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# Deployment configuration
+deployment:
+  # Enable or disable the Deployment
+  enabled: true
+
+  # Image override for the deployment (fallback to global image if not set)
+  image:
+    repository: ""
+    tag: ""
+    pullPolicy: ""
+
+  # Number of replicas (used when autoscaling is disabled)
+  replicaCount: 1
+
+  # Pod annotations
+  podAnnotations: {}
+
+  # Pod labels
+  podLabels: {}
+
+  # Pod security context
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  # Container security context
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  # Container port configuration
+  containerPort: 8080
+
+  # Liveness probe configuration
+  livenessProbe:
+    enabled: false
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  # Readiness probe configuration
+  readinessProbe:
+    enabled: false
+    httpGet:
+      path: /ready
+      port: http
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+
+  # Resource limits and requests
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  # Volumes configuration
+  volumes: []
+    # - name: config-volume
+    #   configMap:
+    #     name: my-config
+
+  # Volume mounts configuration
+  volumeMounts: []
+    # - name: config-volume
+    #   mountPath: /config
+
+  # Environment variables
+  env: []
+    # - name: ENV_VAR_NAME
+    #   value: "value"
+
+  # Environment variables from ConfigMap or Secret
+  envFrom: []
+    # - configMapRef:
+    #     name: my-config
+    # - secretRef:
+    #     name: my-secret
+
+  # Node selector
+  nodeSelector: {}
+
+  # Tolerations
+  tolerations: []
+
+  # Affinity
+  affinity: {}
+
+# Horizontal Pod Autoscaler configuration
+autoscaling:
+  # Enable or disable autoscaling
+  enabled: false
+
+  # Minimum number of replicas
+  minReplicas: 1
+
+  # Maximum number of replicas
+  maxReplicas: 10
+
+  # Target metrics for autoscaling
+  metrics:
+    # CPU utilization target
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    # Memory utilization target
+    # - type: Resource
+    #   resource:
+    #     name: memory
+    #     target:
+    #       type: Utilization
+    #       averageUtilization: 80
+    # Custom metrics example
+    # - type: Pods
+    #   pods:
+    #     metric:
+    #       name: custom_metric
+    #     target:
+    #       type: AverageValue
+    #       averageValue: "100"
+
+# Pod Disruption Budget configuration
+podDisruptionBudget:
+  # Enable or disable PodDisruptionBudget
+  enabled: false
+
+  # Minimum available pods during disruption
+  minAvailable: 1
+
+  # Maximum unavailable pods during disruption (use either minAvailable or maxUnavailable, not both)
+  # maxUnavailable: 1
+
+# Service configuration
+service:
+  # Enable or disable the Service
+  enabled: true
+
+  # Service type (ClusterIP, NodePort, LoadBalancer)
+  type: ClusterIP
+
+  # Service port
+  port: 80
+
+  # Target port (container port)
+  targetPort: 8080
+
+  # NodePort (only used if type is NodePort)
+  # nodePort: 30000
+
+  # Service annotations
+  annotations: {}
+
+  # Service labels
+  labels: {}
+
+# Ingress configuration
+ingress:
+  # Enable or disable Ingress
+  enabled: false
+
+  # Ingress class name
+  className: ""
+
+  # Ingress annotations
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+
+  # Ingress hosts configuration
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: Prefix
+
+  # TLS configuration
+  tls: []
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
+
+# ConfigMap configuration
+configMap:
+  # Enable or disable ConfigMap creation
+  enabled: false
+
+  # ConfigMap data (key-value pairs)
+  data: {}
+    # config.yaml: |
+    #   key: value
+    # app.properties: |
+    #   property=value
+
+# Secret configuration
+secret:
+  # Enable or disable Secret creation
+  enabled: false
+
+  # Secret data (key-value pairs, values will be base64 encoded)
+  data: {}
+    # username: admin
+    # password: secretpassword
+
+# CronJob configuration (supports multiple cron jobs)
+cronJobs: []
+  # - name: example-job
+  #   # Cron schedule (required)
+  #   schedule: "0 0 * * *"
+  #
+  #   # Image override for this cron job (fallback to global image if not set)
+  #   image:
+  #     repository: ""
+  #     tag: ""
+  #     pullPolicy: ""
+  #
+  #   # Command to run
+  #   command: []
+  #     # - /bin/sh
+  #     # - -c
+  #     # - echo "Hello, World!"
+  #
+  #   # Args for the command
+  #   args: []
+  #
+  #   # Resource limits and requests
+  #   resources:
+  #     limits:
+  #       cpu: 500m
+  #       memory: 256Mi
+  #     requests:
+  #       cpu: 100m
+  #       memory: 128Mi
+  #
+  #   # Volumes configuration
+  #   volumes: []
+  #
+  #   # Volume mounts configuration
+  #   volumeMounts: []
+  #
+  #   # Environment variables
+  #   env: []
+  #
+  #   # Environment variables from ConfigMap or Secret
+  #   envFrom: []
+  #
+  #   # CronJob specific settings
+  #   concurrencyPolicy: Forbid
+  #   failedJobsHistoryLimit: 1
+  #   successfulJobsHistoryLimit: 3
+  #   restartPolicy: OnFailure
+  #
+  #   # Node selector
+  #   nodeSelector: {}
+  #
+  #   # Tolerations
+  #   tolerations: []
+  #
+  #   # Affinity
+  #   affinity: {}

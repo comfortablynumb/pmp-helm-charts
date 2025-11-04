@@ -1,0 +1,80 @@
+{{- range .Values.cronJobs }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "application.fullname" $ }}-{{ .name }}
+  labels:
+    {{- include "application.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: cronjob
+    app.kubernetes.io/cronjob-name: {{ .name }}
+spec:
+  schedule: {{ .schedule | quote }}
+  concurrencyPolicy: {{ .concurrencyPolicy | default "Forbid" }}
+  failedJobsHistoryLimit: {{ .failedJobsHistoryLimit | default 1 }}
+  successfulJobsHistoryLimit: {{ .successfulJobsHistoryLimit | default 3 }}
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "application.selectorLabels" $ | nindent 8 }}
+        app.kubernetes.io/component: cronjob
+        app.kubernetes.io/cronjob-name: {{ .name }}
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "application.selectorLabels" $ | nindent 12 }}
+            app.kubernetes.io/component: cronjob
+            app.kubernetes.io/cronjob-name: {{ .name }}
+        spec:
+          {{- with $.Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "application.serviceAccountName" $ }}
+          restartPolicy: {{ .restartPolicy | default "OnFailure" }}
+          containers:
+          - name: {{ .name }}
+            image: {{ include "application.image" (dict "image" .image "global" $.Values.image) }}
+            imagePullPolicy: {{ include "application.imagePullPolicy" (dict "image" .image "global" $.Values.image) }}
+            {{- with .command }}
+            command:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .args }}
+            args:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .resources }}
+            resources:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .env }}
+            env:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .envFrom }}
+            envFrom:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .volumeMounts }}
+            volumeMounts:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+          {{- with .volumes }}
+          volumes:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- end }}
