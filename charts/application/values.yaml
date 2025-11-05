@@ -20,6 +20,18 @@ nameOverride: ""
 # Override the full name
 fullnameOverride: ""
 
+# Namespace configuration
+namespace:
+  # Specifies whether a namespace should be created
+  create: true
+  # The name of the namespace to create/use
+  # If not set, uses the Release.Namespace
+  name: ""
+  # Annotations to add to the namespace
+  annotations: {}
+  # Labels to add to the namespace
+  labels: {}
+
 # ServiceAccount configuration
 serviceAccount:
   # Specifies whether a service account should be created
