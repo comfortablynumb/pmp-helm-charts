@@ -6,9 +6,9 @@
 # These values will be used as defaults for all resources unless overridden
 image:
   # Default Docker image repository
-  repository: ""
+  repository: "ironedge/pmp-test-api"
   # Default image tag (version)
-  tag: ""
+  tag: "latest"
   # Image pull policy
   pullPolicy: IfNotPresent
 
