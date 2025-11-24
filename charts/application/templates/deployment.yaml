@@ -59,7 +59,7 @@ spec:
         envFrom:
           {{- if .Values.secret.enabled }}
           - secretRef:
-              name: {{ .Release.Name }}
+              name: {{ include "application.fullname" . }}
           {{- end }}
           {{- with .Values.deployment.envFrom }}
           {{- toYaml . | nindent 10 }}

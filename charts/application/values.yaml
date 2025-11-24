@@ -15,6 +15,10 @@ image:
 # Image pull secrets for private registries
 imagePullSecrets: []
 
+# Application name used as the default name for all Kubernetes resources
+# If not set, uses the Release.Name combined with the chart name
+applicationName: ""
+
 # Override the chart name
 nameOverride: ""
 # Override the full name
