@@ -128,7 +128,7 @@ deployment:
   # Environment variables from ConfigMap or Secret
   envFrom:
     - secretRef:
-      name: config
+        name: config
     # - configMapRef:
     #     name: my-config
     # - secretRef:
