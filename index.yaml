@@ -3,6 +3,23 @@ entries:
   application:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2025-11-24T01:08:33.246407169Z"
+    description: A Helm chart for deploying applications with Deployments, CronJobs,
+      and supporting resources
+    digest: c9e5215a6f195aa65d3b6048ceade6d833751e0691b7efd824f00149411fb6ab
+    keywords:
+    - application
+    - deployment
+    - cronjob
+    maintainers:
+    - name: Gustavo Falco
+    name: application
+    type: application
+    urls:
+    - https://github.com/comfortablynumb/pmp-helm-charts/releases/download/application-0.0.14/application-0.0.14.tgz
+    version: 0.0.14
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2025-11-24T01:03:33.204938022Z"
     description: A Helm chart for deploying applications with Deployments, CronJobs,
       and supporting resources
@@ -205,4 +222,4 @@ entries:
     urls:
     - https://github.com/comfortablynumb/pmp-helm-charts/releases/download/application-0.0.1/application-0.0.1.tgz
     version: 0.0.1
-generated: "2025-11-24T01:03:33.204998866Z"
+generated: "2025-11-24T01:08:33.24650419Z"
