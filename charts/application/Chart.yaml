@@ -2,7 +2,7 @@ apiVersion: v2
 name: application
 description: A Helm chart for deploying applications with Deployments, CronJobs, and supporting resources
 type: application
-version: 0.0.19
+version: 0.0.20
 appVersion: "1.0"
 keywords:
   - application
