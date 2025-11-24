@@ -252,7 +252,7 @@ configMap:
 # Secret configuration
 secret:
   # Enable or disable Secret creation
-  enabled: false
+  enabled: true
 
   # Secret data (key-value pairs, values will be base64 encoded)
   data: {}
