@@ -55,9 +55,15 @@ spec:
         env:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        {{- with .Values.deployment.envFrom }}
+        {{- if or .Values.secret.enabled .Values.deployment.envFrom }}
         envFrom:
+          {{- if .Values.secret.enabled }}
+          - secretRef:
+              name: {{ include "application.fullname" . }}
+          {{- end }}
+          {{- with .Values.deployment.envFrom }}
           {{- toYaml . | nindent 10 }}
+          {{- end }}
         {{- end }}
         {{- with .Values.deployment.volumeMounts }}
         volumeMounts:
