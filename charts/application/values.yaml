@@ -257,7 +257,8 @@ secret:
   enabled: true
 
   # Secret data (key-value pairs, values will be base64 encoded)
-  data: {}
+  data:
+    _INIT: 1
     # username: admin
     # password: secretpassword
 
