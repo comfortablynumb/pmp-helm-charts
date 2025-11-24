@@ -258,7 +258,7 @@ secret:
 
   # Secret data (key-value pairs, values will be base64 encoded)
   data:
-    _INIT: 1
+    _INIT: "1"
     # username: admin
     # password: secretpassword
 
