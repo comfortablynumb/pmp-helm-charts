@@ -110,24 +110,17 @@ CronJobs are configured as an array, allowing multiple scheduled jobs:
 | `cronJobs[].resources` | Resource limits and requests | See values.yaml |
 | `cronJobs[].concurrencyPolicy` | Concurrency policy | `Forbid` |
 
-### Secret Configuration
+### Secrets Configuration
+
+Secrets are configured as an array, allowing multiple secrets with custom names:
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `secret.enabled` | Enable default Secret creation | `true` |
-| `secret.data` | Secret data (key-value pairs, auto base64 encoded) | `{}` |
-
-### Additional Secrets Configuration
-
-Additional secrets are configured as an array, allowing multiple secrets with custom names:
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `additionalSecrets[].name` | Name of the Secret | Required |
-| `additionalSecrets[].type` | Secret type | `Opaque` |
-| `additionalSecrets[].annotations` | Annotations to add to the Secret | `{}` |
-| `additionalSecrets[].labels` | Labels to add (in addition to chart labels) | `{}` |
-| `additionalSecrets[].data` | Secret data (key-value pairs, auto base64 encoded) | `{}` |
+| `secrets[].name` | Name of the Secret | Required |
+| `secrets[].type` | Secret type | `Opaque` |
+| `secrets[].annotations` | Annotations to add to the Secret | `{}` |
+| `secrets[].labels` | Labels to add (in addition to chart labels) | `{}` |
+| `secrets[].data` | Secret data (key-value pairs, auto base64 encoded) | `{}` |
 
 ## Usage Examples
 
@@ -280,7 +273,7 @@ deployment:
     - configMapRef:
         name: my-app-release-application
     - secretRef:
-        name: my-app-release-application
+        name: app-secrets
 
 configMap:
   enabled: true
@@ -292,14 +285,15 @@ configMap:
         port: 8080
         host: 0.0.0.0
 
-secret:
-  enabled: true
-  data:
-    database-password: mySecretPassword123
-    api-key: myApiKey456
+secrets:
+  - name: app-secrets
+    type: Opaque
+    data:
+      database-password: mySecretPassword123
+      api-key: myApiKey456
 ```
 
-### Example 6: Application with Multiple Additional Secrets
+### Example 6: Application with Multiple Secrets
 
 ```yaml
 image:
@@ -309,23 +303,21 @@ image:
 deployment:
   enabled: true
   envFrom:
-    # Reference the default secret
+    # Reference secrets explicitly
     - secretRef:
-        name: my-app-release-application
-    # Reference additional secrets
+        name: app-config
     - secretRef:
         name: database-credentials
     - secretRef:
         name: third-party-api-keys
 
-# Default secret with app configuration
-secret:
-  enabled: true
-  data:
-    APP_SECRET_KEY: myAppSecretKey123
+# All secrets configured in the secrets array
+secrets:
+  - name: app-config
+    type: Opaque
+    data:
+      APP_SECRET_KEY: myAppSecretKey123
 
-# Additional secrets with custom names
-additionalSecrets:
   - name: database-credentials
     type: Opaque
     annotations:

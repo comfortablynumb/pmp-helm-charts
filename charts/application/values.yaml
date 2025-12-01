@@ -253,18 +253,8 @@ configMap:
     # app.properties: |
     #   property=value
 
-# Secret configuration
-secret:
-  # Enable or disable Secret creation
-  enabled: true
-
-  # Secret data (key-value pairs, values will be base64 encoded)
-  data: {}
-    # username: admin
-    # password: secretpassword
-
-# Additional Secrets configuration (supports multiple secrets with custom names)
-additionalSecrets: []
+# Secrets configuration (supports multiple secrets with custom names)
+secrets: []
   # - name: my-custom-secret
   #   # Secret type (default: Opaque)
   #   type: Opaque
