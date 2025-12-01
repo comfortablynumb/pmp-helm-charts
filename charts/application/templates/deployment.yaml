@@ -51,8 +51,12 @@ spec:
         {{- end }}
         resources:
           {{- toYaml .Values.deployment.resources | nindent 10 }}
-        {{- with .Values.deployment.env }}
         env:
+          - name: KUBERNETES_NODE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+        {{- with .Values.deployment.env }}
           {{- toYaml . | nindent 10 }}
         {{- end }}
         {{- with .Values.deployment.envFrom }}

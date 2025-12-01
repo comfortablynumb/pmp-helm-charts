@@ -61,6 +61,8 @@ These settings apply to all resources unless overridden at the resource level:
 | `deployment.resources.requests.cpu` | CPU request | `100m` |
 | `deployment.resources.requests.memory` | Memory request | `128Mi` |
 
+**Note**: All pods (Deployment and CronJobs) automatically include the `KUBERNETES_NODE_IP` environment variable, which is populated with the node's IP address using the Kubernetes downward API.
+
 ### Autoscaling Configuration
 
 | Parameter | Description | Default |
