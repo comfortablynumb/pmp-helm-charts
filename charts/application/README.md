@@ -110,6 +110,25 @@ CronJobs are configured as an array, allowing multiple scheduled jobs:
 | `cronJobs[].resources` | Resource limits and requests | See values.yaml |
 | `cronJobs[].concurrencyPolicy` | Concurrency policy | `Forbid` |
 
+### Secret Configuration
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `secret.enabled` | Enable default Secret creation | `true` |
+| `secret.data` | Secret data (key-value pairs, auto base64 encoded) | `{}` |
+
+### Additional Secrets Configuration
+
+Additional secrets are configured as an array, allowing multiple secrets with custom names:
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `additionalSecrets[].name` | Name of the Secret | Required |
+| `additionalSecrets[].type` | Secret type | `Opaque` |
+| `additionalSecrets[].annotations` | Annotations to add to the Secret | `{}` |
+| `additionalSecrets[].labels` | Labels to add (in addition to chart labels) | `{}` |
+| `additionalSecrets[].data` | Secret data (key-value pairs, auto base64 encoded) | `{}` |
+
 ## Usage Examples
 
 ### Example 1: Simple Web Application
@@ -278,6 +297,59 @@ secret:
   data:
     database-password: mySecretPassword123
     api-key: myApiKey456
+```
+
+### Example 6: Application with Multiple Additional Secrets
+
+```yaml
+image:
+  repository: my-app
+  tag: "1.0.0"
+
+deployment:
+  enabled: true
+  envFrom:
+    # Reference the default secret
+    - secretRef:
+        name: my-app-release-application
+    # Reference additional secrets
+    - secretRef:
+        name: database-credentials
+    - secretRef:
+        name: third-party-api-keys
+
+# Default secret with app configuration
+secret:
+  enabled: true
+  data:
+    APP_SECRET_KEY: myAppSecretKey123
+
+# Additional secrets with custom names
+additionalSecrets:
+  - name: database-credentials
+    type: Opaque
+    annotations:
+      description: "Database connection credentials"
+    labels:
+      app.kubernetes.io/component: database
+    data:
+      DB_HOST: postgres.example.com
+      DB_PORT: "5432"
+      DB_USERNAME: app_user
+      DB_PASSWORD: super_secret_password
+      DB_NAME: production_db
+
+  - name: third-party-api-keys
+    type: Opaque
+    annotations:
+      description: "Third-party service API keys"
+    labels:
+      app.kubernetes.io/component: integrations
+    data:
+      STRIPE_API_KEY: sk_live_xxxxxxxxxxxxx
+      SENDGRID_API_KEY: SG.xxxxxxxxxxxxx
+      AWS_ACCESS_KEY_ID: AKIA_xxxxxxxxxxxxx
+      AWS_SECRET_ACCESS_KEY: super_secret_aws_key
 ```
 
 ## Upgrading

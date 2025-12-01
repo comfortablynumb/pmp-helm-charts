@@ -263,6 +263,25 @@ secret:
     # username: admin
     # password: secretpassword
 
+# Additional Secrets configuration (supports multiple secrets with custom names)
+additionalSecrets: []
+  # - name: my-custom-secret
+  #   # Secret type (default: Opaque)
+  #   type: Opaque
+  #   # Annotations to add to the secret
+  #   annotations: {}
+  #   # Labels to add to the secret (in addition to default chart labels)
+  #   labels: {}
+  #   # Secret data (key-value pairs, values will be base64 encoded)
+  #   data: {}
+  #     # api-key: my-api-key-value
+  #     # token: my-token-value
+  # - name: another-secret
+  #   type: Opaque
+  #   data:
+  #     username: admin
+  #     password: secretpassword
+
 # CronJob configuration (supports multiple cron jobs)
 cronJobs: []
   # - name: example-job
