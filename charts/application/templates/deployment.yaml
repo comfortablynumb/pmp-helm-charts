@@ -17,8 +17,6 @@ spec:
       {{- if .Values.deployment.podAnnotations }}
       annotations:
         {{- toYaml .Values.deployment.podAnnotations | nindent 8 }}
-      {{- else }}
-      annotations: {}
       {{- end }}
       labels:
         {{- include "application.selectorLabels" . | nindent 8 }}
