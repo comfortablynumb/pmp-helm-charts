@@ -10,7 +10,7 @@ image:
   # Default image tag (version)
   tag: "latest"
   # Image pull policy
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 # Image pull secrets for private registries
 imagePullSecrets: []
